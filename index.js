@@ -106,17 +106,20 @@ async function updateGHL(contactId, opportunityId, conflictResult) {
   });
   console.log('Contact tags updated');
 
-  // Update Opportunity stage
-  await axios({
-    method: 'put',
-    url: `https://services.leadconnectorhq.com/opportunities/${opportunityId}`,
-    headers: GHL_HEADERS,
-    data: {
-      pipelineStageId: isConflict
-        ? STAGES.ATTORNEY_REVIEW
-        : STAGES.CONSULTATION_SCHEDULED
-    }
-  });
+  // Update Opportunity custom fields + stage
+await axios({
+  method: 'put',
+  url: `https://services.leadconnectorhq.com/opportunities/${opportunityId}`,
+  headers: GHL_HEADERS,
+  data: {
+    pipelineStageId: isConflict ? STAGES.ATTORNEY_REVIEW : STAGES.CONSULTATION_SCHEDULED,
+    customFields: [
+      { key: 'conflict_check_status', field_value: isConflict ? 'Conflict Found' : 'Clear' },
+      { key: 'conflict_check_summary', field_value: conflictResult.summary },
+      { key: 'conflict_check_date', field_value: new Date().toISOString() }
+    ]
+  }
+});
   console.log(`Opportunity moved to: ${isConflict ? 'Attorney Review' : 'Consultation Scheduled'}`);
 }
 
