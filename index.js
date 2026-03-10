@@ -22,7 +22,9 @@ app.get('/', (req, res) => {
 
 app.post('/conflict-check', async (req, res) => {
   try {
-    const { contact_id, opportunity_id, client_name, opposing_party, related_parties } = req.body;
+    const data = req.body.customData || req.body;
+    const { contact_id, opportunity_id, contact_name, opposing_party, related_parties } = data;
+    const client_name = contact_name;
     console.log(`Conflict check for: ${client_name}`);
     console.log(`Opposing party: ${opposing_party}`);
 
