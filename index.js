@@ -116,7 +116,9 @@ await axios({
     customFields: [
       { key: 'conflict_check_status', field_value: isConflict ? 'Conflict Found' : 'Clear' },
       { key: 'conflict_check_summary', field_value: conflictResult.summary },
-      { key: 'conflict_check_date', field_value: new Date().toISOString() }
+      { key: 'conflict_check_date', field_value: new Date().toISOString() },
+      { key: 'conflict_decision', field_value: isConflict ? 'Pending Attorney Review' : '' },
+      { key: 'conflict_review_date', field_value: new Date().toISOString() }
     ]
   }
 });
